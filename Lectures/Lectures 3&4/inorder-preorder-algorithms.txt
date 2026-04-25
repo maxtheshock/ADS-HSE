@@ -1,0 +1,22 @@
+// Pseudo-code implementations for -Order recursions
+
+Inorder(node):
+    if node == nullptr:
+        return;
+    Inorder(node -> left)
+    DoSmth(node -> value)
+    Inorder(node -> right)
+
+Preorder(node):
+    if node == nullptr:
+        return;
+    DoSmth(node -> value)
+    Preorder(node -> left)
+    Preorder(node -> right)
+
+Postorder(node):
+    if node == nullptr:
+        return;
+    Postorder(node -> left)
+    Postorder(node -> right)
+    DoSmth(node -> value)
