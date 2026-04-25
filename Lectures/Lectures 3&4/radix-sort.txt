@@ -1,0 +1,23 @@
+// Let's write pseudo-code for Radix sort (non-comparative algorithm)
+
+Radix(a):
+    mask = 255;
+    shift = 0;
+    for i=0 to 4:
+        CountingSort(a, mask, shift)
+        mask <<= 8;
+        shift += 8;
+    return a;
+
+CountingSort(a, mask, shift):
+    c = [0]*256;
+    b = [0]*a.size();
+    for i = 0 to a.size()-1:
+        C[Calc(a[i], mask, shift)]+1;
+    for i = 1 to 255:
+        C[Calc(a[i], mask, shift)] -= 1;
+        b[C[Calc(a[i], mask, shift)]] = a[i];
+    return b;
+
+Calc(item, mask, shift):
+    return (item & mask) >> shift;

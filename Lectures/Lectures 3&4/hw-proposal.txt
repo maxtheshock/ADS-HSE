@@ -1,0 +1,2 @@
+Implement 3 algorithms among: InsertionSort, MergeSort, RadixSort
+and measure time for arrays sized: 10^4 elements, 10^9 elements.

@@ -1,0 +1,9 @@
+Question: Can we use CountingSort with negative numbers in an array?
+
+Idea: Find min and for each a[i] += |min| making all elements non-negative.
+(we supposed that min < 0)
+
+after sorting, we restore original values by a[i] -= |min|
+
+--------------------------------------------------------
+
