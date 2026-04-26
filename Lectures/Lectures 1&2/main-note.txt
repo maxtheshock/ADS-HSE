@@ -1,0 +1,25 @@
+---         LECTURE 1: Sorting algorithms and BigO-notation       ---
+
+<may be, later>
+
+---         LECTURE 2: Theoretical barrier for comparative sorting algorithms       ---
+
+We proved that any comparative sorting algorithm cannot work faster than C*n*log(n), C - const.
+
+Proof idea. Among all possible permutations on N elements, the only one will be sorted
+(we may say, that there exists only one sorted vartiant of original array)
+
+We imagine all possible permutations as leaves (L) of a tree with each node comparing elements
+a[i] <?> a[j] and permuting an array. For N many elements we have n! many possibilities to re-order
+array entires, that means we MUST be able to distinguish all of them (we call such algorithms
+universal sortings) so the number of leaves CAN'T be LESS than n!     =>      L >= n!      (*)
+
+H - the height of the tree, which by definition means the longest way from the root to the leaf.
+A binary tree with a height H has no more than 2^H leaves (some of them may be closer to the root)
+meaning:        2^H >= L        (**)
+
+Combining (*) and (**), we have 2^H >= n! <=> H >= log_2(n!) >= n*log_2(n) - by the Stirling's
+                                                                                    formula
+
+So, any comparative sorting algorithm cannot bypass n*log(n).               Q.E.D.
+
