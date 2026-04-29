@@ -1,0 +1,1 @@
+What is the minimum N s.t. 3x2-bricks can fit 

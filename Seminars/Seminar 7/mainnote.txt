@@ -1,0 +1,6 @@
+----- BINARY SEARCH -----
+
+1. Real-valued (вещественный)
+2. Integer-based (целочисленный)
+3. By result/response (по ответу)
+
