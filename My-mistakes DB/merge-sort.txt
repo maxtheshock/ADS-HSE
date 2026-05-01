@@ -1,0 +1,21 @@
+Mistakes I made trying to implement MergeSort without any hints:
+
+------- MERGING FUNCTION --------
+
+(!) did not use CONST keyword in reference function declaration
+(!) .append instead of .push_back method used;
+(!) c.resize() instead of c.reserve() used to adjust vector's size;
+(!) 2 last checks put into inner loop (should be outer one)
+(!) After either i or j is exhausted, there MUST be a WHILE-loop,
+    whereas I used IF statement in last 2 checks
+
+if (i == a.size()) --> while (i < a.size())
+if (j == b.size()) --> while (j < b.size())
+
+------- DIVIDING RECURSION --------
+
+(!) it should not be a VOID function, it MUST return std::vector
+(!) No ELSE clause in the definition of the function
+(!) No recursion established. Function constructs halves through itself
+    std::vector<T> left(...) --> std::vector<T> left = sort(..., ...)
+(!) inside sort() we call std::vector() with its iterators
