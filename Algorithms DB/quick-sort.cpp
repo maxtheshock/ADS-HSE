@@ -2,7 +2,8 @@
 #include <vector>
 #include <algorithm> // for std::swap
 
-int pivot_index(std::vector<int>& a, int low, int high) {
+template<class T>
+int pivot_index(std::vector<T>& a, int low, int high) {
     int pivot = a[high];
     int i = (low - 1); // indexes 1 position BEFORE subarray
     for (int j = low; j <= high - 1; ++j) {
@@ -15,7 +16,8 @@ int pivot_index(std::vector<int>& a, int low, int high) {
     return (i+1);
 }
 
-void quickSort(std::vector<int>& a, int low, int high) {
+template<class T>
+void quickSort(std::vector<T>& a, int low, int high) {
     if (low < high) {
         int pi = pivot_index(a, low, high);
         quickSort(a, low, pi-1);
