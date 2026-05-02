@@ -1,10 +1,21 @@
 #include <iostream>
 #include <vector>
 #include <algorithm> // for std::swap
+#include <random>
+
+std::mt19937 rd(time(nullptr));
 
 template<class T>
 int pivot_index(std::vector<T>& a, int low, int high) {
-    int pivot = a[high];
+    
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(low, high);
+    int pivot_idx = dis(gen);
+
+    std::swap(a[pivot_idx], a[high]); // swapping the last and the randomly chosen pivot
+
+    T pivot = a[high];
     int i = (low - 1); // indexes 1 position BEFORE subarray
     for (int j = low; j <= high - 1; ++j) {
         if (a[j] <= pivot) {
