@@ -1,0 +1,7 @@
+            Splay-tree (dev. by Tarjan)
+
+  One of the types of balanced search trees in ADS
+
+splay(x) - operation, sending an element X to the root tree.
+
+we
