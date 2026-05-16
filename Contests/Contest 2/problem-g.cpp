@@ -8,7 +8,7 @@ int main() {
     // we just made first copy
     --n; // one less required
 
-    // in this task, we use binary search by the response
+    // in this task, we use binary search on the answer
     // formula for copies produced in N seconds: N/x + N/y
     // but we cannot simply find N because of integer numbers nature
     long long l = 0, r = 1e18;
