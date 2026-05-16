@@ -1,0 +1,7 @@
+Red-Black tree (rules)
+
+1. The root of the RB-tree is always black (if it exists)
+2. Every item of the tree is either red or black
+3. Every red parent have only black children available
+4. Going from any item to the leaf we meet the same amount of black entries
+
