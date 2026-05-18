@@ -2,52 +2,53 @@
 #include <string>
 #include <vector>
 
-// A helper-function for counting digits in a string (Notice: we use std::string_view to avoid copies)
-std::vector<int> count_digits(const std::string_view s) {
-    std::vector<int> res(10, 0);
-    for (size_t i = 0; i < s.length(); ++i) {
-        res[s[i] - '0']++;
-    }
-    return res;
-}
+std::vector<std::vector<int>> build_table(const std::string_view s) {
+    int n = s.length();
 
-// Main function for intersecting maps and computing the largest possible number
-std::string solver(const std::string_view s1, const std::string_view s2) {
-    std::vector<int> digits_s1 = count_digits(s1);
-    std::vector<int> digits_s2 = count_digits(s2);
+    std::vector<std::vector<int>> next_pos(n+1, std::vector<int>(26, -1));
+    std::vector<int> current_last(26, -1);
 
-    std::vector<int> intersection(10, 0);
-    int total_length = 0;
-    for (int i = 0; i < 10; ++i) {
-        int curr_digit_s1 = digits_s1[i];
-        int curr_digit_s2 = digits_s2[i];
-        intersection[i] = std::min(digits_s1[i], digits_s2[i]);
-        total_length += intersection[i];
-    }
-    
-    if (total_length == 0) { return "-1"; }
-    std::string res = "";
-    res.reserve(total_length);
-
-    for (int i = 9; i >= 0; --i) {
-        int entry = intersection[i];
-        while (entry > 0) {
-            res += (i + '0');
-            --entry;
+    for (int i = n-1; i >= 0; --i) {
+        current_last[s[i] - 'a'] = i;
+        for (int c = 0; c < 26; ++c) {
+            next_pos[i][c] = current_last[c];
         }
     }
 
-    if (res[0] == '0') { return "0"; }
-
-    return res;
+    return next_pos;
 }
 
-
 int main() {
-    std::string a, b;
-    std::cin >> a >> b;
+    std::string x, y;
+    std::cin >> x >> y;
+
+    // we construct these special tables for both parents
+    auto next_x = build_table(x);
+    auto next_y = build_table(y);
+    std::string res = "";
+    int pos_x = 0;
+    int pos_y = 0;
+
+    while (pos_x < x.length() && pos_y < y.length()) {
+        bool letter_found = false;
+
+        for (int c = 25; c >= 0; --c) {
+            int idx_x = next_x[pos_x][c];
+            int idx_y = next_y[pos_y][c];
+
+            if (idx_x != -1 && idx_y != -1) {
+                res.push_back(c + 'a');
+                pos_x = idx_x + 1;
+                pos_y = idx_y + 1;
+                letter_found = true;
+                break;
+            }
+        }
+
+        if (letter_found == false) { break; }
+    }
     
-    std::string final = solver(a, b);
-    std::cout << final << std::endl;
+    std::cout << res << std::endl;
     return 0;
+
 }
