@@ -1,0 +1,34 @@
+We discuss removal of nodes from RB (red-black) trees
+
+- If our node is red, we have no troubles while removing(!)
+- If its black, then we should analyze our brother depending on colors of its children
+(generally, we have 4 cases: B-B; R-R; B-R; R-B)
+
+-----------------
+
+
+TrIes (trees with letter 'I')
+Data structure designed for storing strings. It's very easy to add, insert and find elements
+in this DS but it has a large disadvantage: it requires enormously large amount of memory to
+store (sum of all possible words in the worst case)
+
+
+
+Compact Tries (no need to store every character)
+it's kinda an optimization of the previous trie
+
+
+
+
+-------
+
+PATRICIA - another data structure designed for working with strings
+
+P ractical
+A lgorithm
+T o
+R etrieve
+I nformation
+C oded
+I n
+A lphanumeric
