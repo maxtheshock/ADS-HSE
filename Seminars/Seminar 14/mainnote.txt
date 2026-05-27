@@ -1,0 +1,10 @@
+------- Cartesian Tree -------
+
+we have 2 operations available
+
+split(T, key) -> T_L, T_R
+T_L <= key
+T_R > key
+
+merge(T_L, T_R) -> T
+T_L < T_R
