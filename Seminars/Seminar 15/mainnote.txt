@@ -1,0 +1,11 @@
+Задача
+массив за O(log n)
+на ЛЮБУЮ(!) операцию
+
+in_ordered(node)
+    in_ordered(node->left)
+    print(node->value)
+    in_ordered(node->right)
+
+
+
