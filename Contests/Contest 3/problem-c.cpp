@@ -5,137 +5,193 @@
 #include <vector>
 #include <algorithm>
 
+using ll = long long;
+
 struct Node {
-    long long max_free;
-    long long pref;
-    long long suff;
-    int l;
-    int r;
+    ll max_free;
+    ll pref;
+    ll suff;
+    int left;
+    int right;
     int lazy;
 };
 
 std::vector<Node> tree;
 
-int create_node(long long len) {
+int create_node(ll len) {
     tree.push_back({len, len, len, -1, -1, -1});
-    return tree.size() - 1;
+    return static_cast<int>(tree.size()) - 1;
 }
 
-void push(int v, long long tl, long long tr) {
-    if (tree[v].lazy != -1) {
-        long long tm = tl + (tr - tl) / 2;
-        
-        if (tree[v].l == -1) tree[v].l = create_node(tm - tl + 1);
-        if (tree[v].r == -1) tree[v].r = create_node(tr - tm);
+void apply(int v, ll len, int val) {
+    tree[v].lazy = val;
 
-        int l = tree[v].l;
-        int r = tree[v].r;
-        int val = tree[v].lazy;
-
-        tree[l].lazy = val;
-        tree[r].lazy = val;
-
-        if (val == 1) {
-            tree[l].max_free = tree[l].pref = tree[l].suff = 0;
-            tree[r].max_free = tree[r].pref = tree[r].suff = 0;
-        } else {
-            tree[l].max_free = tree[l].pref = tree[l].suff = tm - tl + 1;
-            tree[r].max_free = tree[r].pref = tree[r].suff = tr - tm;
-        }
-        tree[v].lazy = -1;
+    if (val == 1) {
+        tree[v].max_free = 0;
+        tree[v].pref = 0;
+        tree[v].suff = 0;
+    } else {
+        tree[v].max_free = len;
+        tree[v].pref = len;
+        tree[v].suff = len;
     }
 }
 
-void update(int v, long long tl, long long tr, long long ql, long long qr, int val) {
-    if (ql > qr) return;
-    
-    if (ql == tl && qr == tr) {
-        tree[v].lazy = val;
-        if (val == 1) {
-            tree[v].max_free = tree[v].pref = tree[v].suff = 0;
-        } else {
-            tree[v].max_free = tree[v].pref = tree[v].suff = tr - tl + 1;
-        }
+void ensure_children(int v, ll tl, ll tr) {
+    if (tl == tr) {
         return;
     }
-    
-    push(v, tl, tr);
-    
-    long long tm = tl + (tr - tl) / 2;
-    if (tree[v].l == -1) tree[v].l = create_node(tm - tl + 1);
-    if (tree[v].r == -1) tree[v].r = create_node(tr - tm);
 
-    update(tree[v].l, tl, tm, ql, std::min(qr, tm), val);
-    update(tree[v].r, tm + 1, tr, std::max(ql, tm + 1LL), qr, val);
+    ll tm = tl + (tr - tl) / 2;
 
-    int l = tree[v].l;
-    int r = tree[v].r;
-    long long len_l = tm - tl + 1;
-    long long len_r = tr - tm;
+    if (tree[v].left == -1) {
+        tree[v].left = create_node(tm - tl + 1);
+    }
 
-    tree[v].pref = tree[l].pref;
-    if (tree[l].pref == len_l) tree[v].pref += tree[r].pref;
-
-    tree[v].suff = tree[r].suff;
-    if (tree[r].suff == len_r) tree[v].suff += tree[l].suff;
-
-    tree[v].max_free = std::max({tree[l].max_free, tree[r].max_free, tree[l].suff + tree[r].pref});
+    if (tree[v].right == -1) {
+        tree[v].right = create_node(tr - tm);
+    }
 }
 
-long long find_leftmost(int v, long long tl, long long tr, long long K) {
-    if (tree[v].max_free < K) return -1;
-    if (tl == tr) return tl;
-    
-    push(v, tl, tr);
-    
-    long long tm = tl + (tr - tl) / 2;
-    if (tree[v].l == -1) tree[v].l = create_node(tm - tl + 1);
-    if (tree[v].r == -1) tree[v].r = create_node(tr - tm);
+void push(int v, ll tl, ll tr) {
+    if (tree[v].lazy == -1 || tl == tr) {
+        return;
+    }
 
-    if (tree[tree[v].l].max_free >= K) {
-        return find_leftmost(tree[v].l, tl, tm, K);
+    ensure_children(v, tl, tr);
+
+    ll tm = tl + (tr - tl) / 2;
+
+    int left = tree[v].left;
+    int right = tree[v].right;
+    int val = tree[v].lazy;
+
+    apply(left, tm - tl + 1, val);
+    apply(right, tr - tm, val);
+
+    tree[v].lazy = -1;
+}
+
+void pull(int v, ll tl, ll tr) {
+    ll tm = tl + (tr - tl) / 2;
+
+    int left = tree[v].left;
+    int right = tree[v].right;
+
+    ll len_left = tm - tl + 1;
+    ll len_right = tr - tm;
+
+    tree[v].pref = tree[left].pref;
+    if (tree[left].pref == len_left) {
+        tree[v].pref += tree[right].pref;
     }
-    if (tree[tree[v].l].suff + tree[tree[v].r].pref >= K) {
-        return tm - tree[tree[v].l].suff + 1;
+
+    tree[v].suff = tree[right].suff;
+    if (tree[right].suff == len_right) {
+        tree[v].suff += tree[left].suff;
     }
-    return find_leftmost(tree[v].r, tm + 1, tr, K);
+
+    tree[v].max_free = std::max({
+        tree[left].max_free,
+        tree[right].max_free,
+        tree[left].suff + tree[right].pref
+    });
+}
+
+void update(int v, ll tl, ll tr, ll ql, ll qr, int val) {
+    if (ql > qr) {
+        return;
+    }
+
+    if (ql == tl && qr == tr) {
+        apply(v, tr - tl + 1, val);
+        return;
+    }
+
+    push(v, tl, tr);
+    ensure_children(v, tl, tr);
+
+    ll tm = tl + (tr - tl) / 2;
+
+    update(tree[v].left, tl, tm, ql, std::min(qr, tm), val);
+    update(tree[v].right, tm + 1, tr, std::max(ql, tm + 1), qr, val);
+
+    pull(v, tl, tr);
+}
+
+ll find_leftmost(int v, ll tl, ll tr, ll k) {
+    if (tree[v].max_free < k) {
+        return -1;
+    }
+
+    if (tl == tr) {
+        return tl;
+    }
+
+    push(v, tl, tr);
+    ensure_children(v, tl, tr);
+
+    ll tm = tl + (tr - tl) / 2;
+
+    int left = tree[v].left;
+    int right = tree[v].right;
+
+    if (tree[left].max_free >= k) {
+        return find_leftmost(left, tl, tm, k);
+    }
+
+    if (tree[left].suff + tree[right].pref >= k) {
+        return tm - tree[left].suff + 1;
+    }
+
+    return find_leftmost(right, tm + 1, tr, k);
 }
 
 struct Query {
-    long long start;
-    long long length;
+    ll start = -1;
+    ll length = 0;
 };
 
 int main() {
-    long long N;
+    ll N;
     int M;
+
     std::cin >> N >> M;
 
-    tree.reserve(10000000); 
+    tree.reserve(7000000);
     create_node(N);
 
-    std::vector<Query> history(M + 1, {-1, 0});
+    std::vector<Query> history(M + 1);
 
     for (int i = 1; i <= M; ++i) {
-        int req;
+        ll req;
         std::cin >> req;
-        
+
         if (req > 0) {
-            long long K = req;
-            long long start = find_leftmost(0, 1, N, K);
-            
-            if (start != -1) {
-                update(0, 1, N, start, start + K - 1, 1);
-                history[i] = {start, K};
-                std::cout << start << std::endl;
-            } else {
+            ll k = req;
+            ll start = find_leftmost(0, 1, N, k);
+
+            if (start == -1) {
                 std::cout << -1 << std::endl;
+            } else {
+                update(0, 1, N, start, start + k - 1, 1);
+
+                history[i].start = start;
+                history[i].length = k;
+
+                std::cout << start << std::endl;
             }
         } else {
-            int T = -req;
-            if (history[T].start != -1) {
-                update(0, 1, N, history[T].start, history[T].start + history[T].length - 1, 0);
-                history[T].start = -1;
+            int t = static_cast<int>(-req);
+
+            if (history[t].start != -1) {
+                ll left = history[t].start;
+                ll right = history[t].start + history[t].length - 1;
+
+                update(0, 1, N, left, right, 0);
+
+                history[t].start = -1;
+                history[t].length = 0;
             }
         }
     }
