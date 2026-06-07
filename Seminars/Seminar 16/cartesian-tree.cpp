@@ -50,3 +50,22 @@ Node* merge(Node* less, Node* more) {
     update(more);
     return more;
 }
+
+void insert(int index, int64_t value) {
+    auto[less, more] = split(root, index);
+    root = merge(merge(less, new Node(value)), more);
+}
+
+void remove(int index) {
+    auto[tmp, more] = split(root, index);
+    auto[less, rem] = split(tmp, index-1);
+    root = merge(less, more);
+}
+
+void print(Node* tree) {
+    if (!tree) return;
+    print(tree->left);
+    std::cout << tree->value << ' '; //
+}
+
+// finish this (Telegram check)
