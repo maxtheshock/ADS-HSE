@@ -1,0 +1,7 @@
+--- Segment tree (first, the idea) ---
+
+The task of RMQ/RMS - range sum/min/max query
+
+query(access) - O(log n)
+changing - O(log n)
+
