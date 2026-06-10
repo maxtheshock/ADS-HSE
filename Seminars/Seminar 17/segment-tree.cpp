@@ -26,8 +26,8 @@ class Tree {
             return 0;
         }
         size_t mid = (left + right) / 2;
-        return get(2*v + 1, left, right, q_left, q_right) +
-            get(2*v + 2, left, right, q_left, q_right);
+        return get(2*v + 1, left, mid, q_left, q_right) +
+            get(2*v + 2, mid, right, q_left, q_right);
     }
 
 public:
