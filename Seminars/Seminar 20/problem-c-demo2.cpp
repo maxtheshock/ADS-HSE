@@ -1,13 +1,11 @@
-#include <map>
 #include <iostream>
-#include <cstdint>
+#include <map>
 #include <string>
 
 class Trie {
     struct Node {
         int count = 0;
         std::map<char, Node> next;
-        bool is_terminal = true;
     } root;
 public:
     void insert(const std::string_view s) {
@@ -16,7 +14,6 @@ public:
             v = &v->next[ch];
             ++v->count;
         }
-        v->is_terminal = true;
     }
     int find(const std::string_view s) {
         Node* v = &root;
@@ -28,11 +25,9 @@ public:
     }
 };
 
-
 int main() {
-    int n = 0;
+    int n;
     std::cin >> n;
-
     Trie trie;
     for (int i = 0; i < n; ++i) {
         std::string s;
@@ -40,13 +35,11 @@ int main() {
         trie.insert(s);
     }
 
-    int q = 0;
+    int q;
     std::cin >> q;
     for (int i = 0; i < q; ++i) {
-        std::string prefix;
-        std::cin >> prefix;
-        std::cout << trie.find(prefix) << std::endl;
+        std::string t;
+        std::cin >> t;
+        std::cout << trie.find(t) << std::endl;
     }
-
-    return 0;
 }
