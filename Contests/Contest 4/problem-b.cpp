@@ -15,7 +15,7 @@ class BillboardManager {
             _tree[node] = _width;
             return;
         }
-        int tm = (tl+(tr-tl)) / 2;
+        int tm = (tl + tr) / 2;
         build(2*node, tl, tm);
         build(2*node + 1, tm+1, tr);
         _tree[node] = std::max(_tree[2*node], _tree[2*node + 1]);
@@ -29,7 +29,7 @@ class BillboardManager {
             _tree[node] -= req_width;
             return tl;
         }
-        int tm = (tl+(tr-tl)) / 2;
+        int tm = (tl + tr) / 2;
         int result;
 
         if (_tree[2*node] >= req_width) {
