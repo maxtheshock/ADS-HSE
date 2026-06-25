@@ -11,13 +11,15 @@ struct RadixStorage {
     std::vector<int> buckets;
 };
 
+constexpr int kMaxCapacity = 1000000000;
 constexpr int kByteBase = 256;
 constexpr int kByteMask = 255;
 constexpr int kBitsInByte = 8;
 constexpr int kPassCount = 4;
 
-int getByteDigit(int value, int pass) {
-    return (value >> (pass * kBitsInByte)) & kByteMask;
+int getByteDigit(const Robot& robot, int pass) {
+    const int reversed_capacity = kMaxCapacity - robot.capacity;
+    return (reversed_capacity >> (pass * kBitsInByte)) & kByteMask;
 }
 
 void resetBuckets(std::vector<int>& buckets) {
@@ -42,14 +44,14 @@ void radixPass(std::vector<Robot>& robots, RadixStorage& storage, int pass) {
     const int robot_count = static_cast<int>(robots.size());
 
     for (int i = 0; i < robot_count; ++i) {
-        const int digit = getByteDigit(robots[i].capacity, pass);
+        const int digit = getByteDigit(robots[i], pass);
         ++storage.buckets[digit];
     }
 
     convertCountsToPositions(storage.buckets);
 
     for (int i = 0; i < robot_count; ++i) {
-        const int digit = getByteDigit(robots[i].capacity, pass);
+        const int digit = getByteDigit(robots[i], pass);
         storage.buffer[storage.buckets[digit]] = robots[i];
         ++storage.buckets[digit];
     }
