@@ -1,4 +1,5 @@
 // this program computes a prefix function for a given string s
+// Def: a border is a simultaneous prefix and a suffix of a string
 
 #include <iostream>
 #include <vector>
@@ -21,10 +22,10 @@ int main() {
     // we ASSUME that we already know p[0 1 ... i-1] and we
     // want to calculate the next one - p[i]
     for (int i = 1; i < n; ++i) {
-        int j = p[i-1]; //-- can omitted, 'cause j already stored a value for the previous i
+        int j = p[i-1]; // j stores a value for the previous i (current best border length)
 
-        // we try to extend a suprefix, if it fails, recursively go
-        // to the 2nd longest suprefix in a substring s[from 0 to j]
+        // we try to extend a border, if it fails, we go
+        // to the 2nd longest border in a substring s[from 0 to j-1]
         while (j > 0 && s[j] != s[i]) {
             j = p[j-1]; // recursion step
         }
