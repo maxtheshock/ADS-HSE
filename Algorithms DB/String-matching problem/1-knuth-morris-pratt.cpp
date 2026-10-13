@@ -24,12 +24,14 @@ std::vector<int> prefixFunction(const std::string_view text) {
 
 int main() {
     std::string t, s;
-    std::cin >> t >> s;
+    std::getline(std::cin, t);
+    std::getline(std::cin, s);
+
     int m = t.length();
     int n = s.length();
 
-    // Stage 1: pre-processing (Constructing an array)
-    std::vector<int> p = prefixFunction(t);
+    // Stage 1: pre-processing (Constructing a prefix-array for the pattern S)
+    std::vector<int> p = prefixFunction(s);
 
     // Stage 2: Search
     std::vector<int> occurrences;
