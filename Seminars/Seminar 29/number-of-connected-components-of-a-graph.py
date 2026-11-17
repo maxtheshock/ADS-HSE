@@ -21,10 +21,5 @@ for v in range(1, n+1):
         color += 1
         dfs(v)
 
-if sum(used) == n:
-    print('YES')
-else:
-    print('NO')
-
 print(color)
 print(*used[1:])
