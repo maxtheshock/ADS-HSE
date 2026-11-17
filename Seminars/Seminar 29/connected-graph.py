@@ -1,7 +1,7 @@
 n, m = map(int, input().split())
 adj = [[] for i in range(n+1)]
 for i in range(m):
-    v, u = map(int, input.split())
+    v, u = map(int, input().split())
     adj[v].append(u)
     adj[u].append(v)
 
